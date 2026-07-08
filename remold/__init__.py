@@ -1,6 +1,7 @@
 """Reshape Python source with LibCST: match structure in the tree, write the new code as plain text, and comments and whitespace come along as ordinary characters."""
+__version__ = "0.1.1"
 
-__version__ = "0.1.0"
+
 
 import re
 from dataclasses import fields
