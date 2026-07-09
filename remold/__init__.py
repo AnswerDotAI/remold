@@ -120,7 +120,8 @@ def whereis(
     "For each fragment, the attribute paths where LibCST keeps it, deepest node first"
     mod = cst.parse_module(src)
     def _hit(n, frag):
-        c = _render(n).strip()
+        try: c = _render(n).strip()
+        except Exception: return False
         return frag in c if contains else c==frag
     return {frag: [p for p,n in sorted(((p,n) for p,n in _walk(mod) if p and _hit(n, frag)), key=lambda o: -len(o[0]))]
             for frag in frags}
