@@ -147,7 +147,8 @@ astfind("save(x, ts=1)\nsave(y)\n", "save($$$, ts=$_)")   # ['save(x, ts=1)']
 
 These make short names searchable: a text search for where `c1` is defined needs a regex per binding syntax and still floods on two-letter names, while `symdefs` answers from the tree.
 '''
-__version__ = "0.1.1"
+__version__ = "0.1.2"
+
 
 
 
