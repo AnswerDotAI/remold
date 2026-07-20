@@ -1,5 +1,5 @@
 import pytest
-from remold import cst, m, astmap, cstmap, code, whereis
+from remold import cst, m, astmap, cstmap, code, whereis, symdefs, symrefs, astfind
 
 tf = m.SimpleStatementLine(body=[m.Expr(m.Call(
     func=m.Name('test_fail'),
@@ -132,3 +132,21 @@ def test_code():
     assert code(node) == 'f(x,  y)'
     p = cst.parse_module("def f(foo, # hey\n      bar): pass\n").body[0].params.params[0]
     assert code(p) == 'foo, # hey\n      '
+
+
+def test_symdefs():
+    src = ("import os, json as j\nfrom x import y as z\nc1,c2 = f()\n(w := 3)\n"
+        "for i in rng: pass\nwith open(p) as fh: pass\ndef g(q): loc = 1\nclass K: pass\n"
+        "try: pass\nexcept E as ex: pass\nif t: br = 1\n")
+    assert symdefs(src) == {'os','j','z','c1','c2','w','i','fh','g','K','ex','br'}
+    assert symdefs("def g(q): loc = 1\n") == {'g'}   # params and locals are not top-level bindings
+    assert symdefs("not python!") == set()
+
+def test_symrefs():
+    assert symrefs("a = f(b) + c.d\ndef g(): return h(a)\n") == {'f','b','c','h','a'}
+    assert symrefs("oops(") == set()
+
+def test_astfind():
+    src = "save(x, ts=1)\nsave(y)\n"
+    assert astfind(src, "save($$$, ts=$_)") == ["save(x, ts=1)"]
+    assert not astfind(src, "load($$$)")

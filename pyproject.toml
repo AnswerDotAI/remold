@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "remold"
 dynamic = ["version"]
-description = "Reshape Python source with LibCST: structure in the tree, comments and whitespace as plain text"
+description = "Structural search and rewrite for Python source, with ast-grep pattern rules and LibCST matcher transforms"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "Apache-2.0" }
@@ -26,6 +26,9 @@ dev = [
 
 [project.urls]
 Homepage = "https://github.com/AnswerDotAI/remold"
+
+[project.entry-points.pyskills]
+remold = "remold"
 
 [tool.setuptools.dynamic]
 version = { attr = "remold.__version__" }
